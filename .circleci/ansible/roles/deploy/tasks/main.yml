@@ -1,0 +1,37 @@
+- name: "Creates backend folder"
+  file:
+    path: /home/ubuntu/backend
+    state: directory
+
+- name: "Unarchive files"
+  unarchive:
+    src: artifact.tar.gz
+    dest: /home/ubuntu/backend
+
+- name: "Install NodeJS Depends"
+  shell: |
+    pwd
+    cd /home/ubuntu/backend
+    npm i
+  
+
+- name: "Backend Deploy"
+  shell: |
+    export TYPEORM_ENTITIES=./backend/dist/modules/domain/**/*.entity{.ts,.js}
+    export TYPEORM_HOST=52.7.18.206
+    export TYPEORM_PORT=5432
+    export TYPEORM_USERNAME=postgres
+    export TYPEORM_PASSWORD=postgres
+    export TYPEORM_DATABASE=postgres
+    export TYPEORM_MIGRATIONS_DIR=./backend/dist/migrations
+    export TYPEORM_MIGRATIONS=./backend/dist/migrations/*.ts
+    pm2 stop default
+    pm2 start -f /home/ubuntu/backend/dist/main.js
+    pm2 status 
+  register: execute_node 
+
+- name: print message
+  debug:
+    msg: "{{ execute_node.stdout_lines }}"
+
+
