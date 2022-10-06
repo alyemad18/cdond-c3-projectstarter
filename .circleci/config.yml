@@ -13,10 +13,10 @@ commands:
             aws cloudformation delete-stack --stack-name udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}
   
   installing-dependencies:
-    description: installing All Needed Dependencies For Image
+    description: Install Dependencies
     steps:
       - run:
-          name: installing All Needed Dependencies For Image
+          name: Install Dependencies
           command: |
             python3 -m pip install --user ansible
             curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
